@@ -11,12 +11,46 @@ function App() {
 
   return (
     <>
+      <Advice />
       <Clock />
+
       <TodoInput setTodo={setTodo} />
       <TodoList todo={todo} setTodo={setTodo} />
     </>
   );
 }
+
+const useFetch = (url) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        setData(res);
+        setIsLoading(false);
+      });
+  }, [url]);
+  return [isLoading, data];
+};
+
+//랜덤 명언 출력
+const Advice = () => {
+  const [isLoading, data] = useFetch(
+    "https://korean-advice-open-api.vercel.app/api/advice"
+  );
+  return (
+    <>
+      {!isLoading && (
+        <>
+          <div>{data.message}</div>
+          <div>-{data.author}-</div>
+        </>
+      )}
+    </>
+  );
+};
 
 // 현재 시간 표시
 const Clock = () => {
