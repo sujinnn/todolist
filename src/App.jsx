@@ -22,7 +22,16 @@ function App() {
       <button onClick={addTodo}>추가</button>
       <ul>
         {todo.map((todo) => (
-          <li key={todo.id}>{todo.content}</li>
+          <li key={todo.id}>
+            {todo.content}
+            <button
+              onClick={() => {
+                setTodo((prev) => prev.filter((el) => el.id !== todo.id));
+              }}
+            >
+              삭제
+            </button>
+          </li>
         ))}
       </ul>
     </>
