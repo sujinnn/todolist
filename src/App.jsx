@@ -2,12 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import "./App.css";
 
 function App() {
-  const [todo, setTodo] = useState([
-    {
-      id: Number(new Date()),
-      content: "Hi",
-    },
-  ]);
+  const [isLoading, data] = useFetch("http://localhost:3000/todo");
+  const [todo, setTodo] = useState([]);
+
+  useEffect(() => {
+    if (data) setTodo(data);
+  }, [isLoading]);
 
   return (
     <>
@@ -70,10 +70,17 @@ const TodoInput = ({ setTodo }) => {
   const inputRef = useRef(null);
   const addTodo = () => {
     const newTodo = {
-      id: Number(new Date()),
+      // id: Number(new Date()),
       content: inputRef.current.value,
     };
-    setTodo((prev) => [...prev, newTodo]);
+    fetch("http://localhost:3000/todo", {
+      method: "POST",
+      body: JSON.stringify(newTodo),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setTodo((prev) => [...prev, res]);
+      });
   };
 
   return (
@@ -103,7 +110,13 @@ const Todo = ({ todo, setTodo }) => {
         {todo.content}
         <button
           onClick={() => {
-            setTodo((prev) => prev.filter((el) => el.id !== todo.id));
+            fetch(`http://localhost:3000/todo/${todo.id}`, {
+              method: "DELETE",
+            }).then((res) => {
+              if (res.ok) {
+                setTodo((prev) => prev.filter((el) => el.id !== todo.id));
+              }
+            });
           }}
         >
           삭제
