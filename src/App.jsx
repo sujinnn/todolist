@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./App.css";
 
 function App() {
@@ -11,12 +11,27 @@ function App() {
 
   return (
     <>
+      <Clock />
       <TodoInput setTodo={setTodo} />
       <TodoList todo={todo} setTodo={setTodo} />
     </>
   );
 }
 
+// 현재 시간 표시
+const Clock = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+  }, []);
+
+  return <div>{time.toLocaleTimeString()}</div>;
+};
+
+// 할 일 입력
 const TodoInput = ({ setTodo }) => {
   const inputRef = useRef(null);
   const addTodo = () => {
@@ -35,6 +50,7 @@ const TodoInput = ({ setTodo }) => {
   );
 };
 
+// 할 일 여러 개
 const TodoList = ({ todo, setTodo }) => {
   return (
     <ul>
@@ -45,6 +61,7 @@ const TodoList = ({ todo, setTodo }) => {
   );
 };
 
+// 할 일 하나
 const Todo = ({ todo, setTodo }) => {
   return (
     <>
