@@ -39,7 +39,7 @@ const TodoList = ({ todo, setTodo }) => {
   return (
     <ul>
       {todo.map((el) => (
-        <Todo todo={el} setTodo={setTodo} />
+        <Todo key={el.id} todo={el} setTodo={setTodo} />
       ))}
     </ul>
   );
@@ -48,7 +48,7 @@ const TodoList = ({ todo, setTodo }) => {
 const Todo = ({ todo, setTodo }) => {
   return (
     <>
-      <li key={todo.id}>
+      <li>
         {todo.content}
         <button
           onClick={() => {
